@@ -72,3 +72,28 @@ nav a{transition:color .2s}
  .product{height:196px}.product .photo{height:104px}
  .info strong{font-size:12px}.price{font-size:20px}
 }
+
+
+/* Hero photo placement — matches supplied ratchet image and full-page mockup. */
+.hero{
+ position:relative;
+ height:359px;
+ min-height:359px;
+ padding:43px 5.9% 0;
+ background-image:linear-gradient(90deg,rgba(8,12,15,.63) 0%,rgba(8,12,15,.34) 27%,rgba(8,12,15,.07) 49%,transparent 73%),url("assets/hero.webp");
+ background-color:#0d1113;
+ background-position:center center,center 53%;
+ background-size:cover,cover;
+ background-repeat:no-repeat;
+}
+.hero::before{content:none!important}
+.hero-copy{position:relative;z-index:2}
+.hero h1{max-width:720px;line-height:.96}
+.hero-art{display:none!important}
+@media(max-width:900px){
+ .hero{background-position:center,60% center}
+}
+@media(max-width:600px){
+ .hero{height:350px;min-height:350px;background-image:linear-gradient(90deg,rgba(8,12,15,.90) 0%,rgba(8,12,15,.70) 42%,rgba(8,12,15,.15) 100%),url("assets/hero.webp");background-position:center,62% center}
+ .hero::before{content:none!important}
+}
