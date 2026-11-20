@@ -8,7 +8,7 @@ export const productCanonical = slug => new URL(productURL(slug), siteURL).href;
 export const productFile = slug => productURL(slug).slice(1) + 'index.html';
 export const sitemapXML = catalog => '<?xml version="1.0" encoding="UTF-8"?>\n' +
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-  [siteURL, ...catalog.filter(p => p.published).map(p => productCanonical(p.slug))]
+  [siteURL, new URL('poradna/', siteURL).href, ...catalog.filter(p => p.published).map(p => productCanonical(p.slug))]
     .map(url => '  <url><loc>' + escapeHTML(url) + '</loc></url>').join('\n') +
   '\n</urlset>\n';
 
@@ -49,6 +49,7 @@ export function productPage(home, product) {
       <p class="detail-description">${escapeHTML(product.description)}</p>
       <dl><dt>Kód produktu</dt><dd>${escapeHTML(product.sku)}</dd><dt>Délka</dt><dd>${product.length} m</dd><dt>Označení varianty</dt><dd>${escapeHTML(product.capacity)}</dd></dl>
       <p class="detail-price">${product.price.toLocaleString('cs-CZ')} Kč <small>orientační cena</small></p>
+      <p><a href="/poradna/">Jak vybrat upínací pás →</a></p>
     </div>
   </article>
 </section>`;

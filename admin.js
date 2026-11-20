@@ -1,5 +1,5 @@
 import { catalogPath, productURL, statuses, validateCatalog } from './catalog.js?v=paths-2';
-import { productFile, productPage, sitemapXML } from './product-pages.js?v=1';
+import { productFile, productPage, sitemapXML } from './product-pages.js?v=2';
 
 const repository = 'michalsurmanek-sketch/kurtna.cz';
 const api = 'https://api.github.com';

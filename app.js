@@ -145,6 +145,7 @@ function renderDetail() {
         <p class="detail-price">${money(p.price)} <small>orientační cena</small></p>
         ${quoteable(p) ? '<button class="action" id="detail-add">Přidat do poptávky</button>' : '<p>Tuto variantu teď nelze poptat.</p>'}
         <p class="detail-note">Fotografie je ilustrační. Technické údaje a dostupnost podléhají potvrzení dodavatelem.</p>
+        <p><a href="/poradna/">Jak vybrat upínací pás →</a></p>
       </div>
     </article>`;
   const buttons = target.querySelectorAll('.detail-gallery button');
