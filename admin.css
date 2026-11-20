@@ -25,3 +25,7 @@ button:disabled { opacity:.5; cursor:default; }
 #status, #publication { overflow-wrap:anywhere; }
 #preview-link { margin-left:10px; }
 @media(max-width:680px) { .admin-grid,.fields { grid-template-columns:1fr; } }
+
+@media (any-pointer: coarse) {
+  html { -webkit-tap-highlight-color: transparent; }
+}

@@ -22,3 +22,7 @@ section { scroll-margin-top:20px; padding:20px 0 5px; border-bottom:1px solid #4
 dt { font-weight:700; }
 dd { margin:0 0 10px; }
 .button { display:inline-block; padding:10px 15px; background:#ff7413; color:#17120f; font-weight:750; text-decoration:none; border-radius:6px; }
+
+@media (any-pointer: coarse) {
+  html { -webkit-tap-highlight-color: transparent; }
+}
