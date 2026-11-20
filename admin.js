@@ -1,6 +1,10 @@
-import { catalogPath, productURL, statuses, validateCatalog } from './catalog.js';
+import { catalogPath, productURL, statuses, validateCatalog } from './catalog.js?v=paths-2';
+import { productFile, productPage, sitemapXML } from './product-pages.js?v=1';
 
-const endpoint = 'https://api.github.com/repos/michalsurmanek-sketch/kurtna.cz/contents/' + catalogPath;
+const repository = 'michalsurmanek-sketch/kurtna.cz';
+const api = 'https://api.github.com';
+const repoEndpoint = api + '/repos/' + repository;
+const branch = 'main';
 const $ = selector => document.querySelector(selector);
 const editor = $('#editor');
 const publisher = $('#publisher');
@@ -11,6 +15,7 @@ const publishButton = $('#publish');
 const labels = ['name','label','sku','slug','capacity','length','price','status','description','images','published'];
 let products = [];
 let baseSHA;
+let baseProducts = [];
 let selected;
 let pending = false;
 let editing = false;
@@ -94,24 +99,64 @@ editor.addEventListener('submit', event => {
   }
 });
 
-async function github(method, token, body) {
-  const headers = { Accept:'application/vnd.github+json' };
+async function github(url, token, payload) {
+  const headers = {Accept:'application/vnd.github+json'};
   if (token) headers.Authorization = 'Bearer ' + token;
-  if (body) headers['Content-Type'] = 'application/json';
-  const response = await fetch(endpoint + (method === 'GET' ? '?ref=main' : ''), {
-    method, headers, body: body ? JSON.stringify(body) : undefined,
+  if (payload) headers['Content-Type'] = 'application/json';
+  const response = await fetch(url, {
+    method: payload ? 'POST' : 'GET',
+    headers, body: payload ? JSON.stringify(payload) : undefined,
     cache: 'no-store', credentials: 'omit', redirect: 'error',
   });
   if (!response.ok) {
-    if ([401,403,404].includes(response.status) && method === 'PUT') {
-      throw new Error('GitHub odmítl zápis. Ověřte token, repozitář a oprávnění Contents: Read and write.');
-    }
-    if ([409,422].includes(response.status)) {
-      throw new Error('GitHub zápis nepřijal. Katalog se mohl mezitím změnit nebo větev nepovoluje přímý zápis.');
+    if ([401,403,404].includes(response.status) && token) {
+      throw new Error('GitHub odmítl přístup. Ověřte token, repozitář a oprávnění Contents: Read and write.');
     }
     throw new Error('GitHub vrátil chybu ' + response.status + '.');
   }
   return response.json();
+}
+const githubFile = (path, ref, token) =>
+  github(repoEndpoint + '/contents/' + path + '?ref=' + encodeURIComponent(ref), token);
+
+async function publishCatalog(token) {
+  const ref = await github(repoEndpoint + '/git/ref/heads/' + branch, token);
+  const head = ref.object.sha;
+  const [current, homeFile] = await Promise.all([
+    githubFile(catalogPath, head, token),
+    githubFile('index.html', head, token),
+  ]);
+  if (current.sha !== baseSHA) {
+    throw new Error('Katalog se na GitHubu mezitím změnil. Uložte si rozpracované údaje a znovu načtěte editor.');
+  }
+  const draft = JSON.stringify(products, null, 2) + '\n';
+  const home = decode(homeFile.content);
+  const visible = products.filter(p => p.published);
+  const previous = new Map(baseProducts.filter(p => p.published).map(p => [p.slug, p]));
+  const publicSlugs = new Set(visible.map(p => p.slug));
+  const additions = [
+    {path:catalogPath, contents:encode(draft)},
+    {path:'sitemap.xml', contents:encode(sitemapXML(products))},
+    ...visible.filter(p => JSON.stringify(p) !== JSON.stringify(previous.get(p.slug))).map(p => ({
+      path:productFile(p.slug), contents:encode(productPage(home,p)),
+    })),
+  ];
+  const deletions = [...previous.keys()].filter(slug => !publicSlugs.has(slug))
+    .map(slug => ({path:productFile(slug)}));
+  const query = `mutation PublishCatalog($input: CreateCommitOnBranchInput!) {
+    createCommitOnBranch(input: $input) { commit { oid } }
+  }`;
+  const result = await github(api + '/graphql', token, {query, variables:{input:{
+    branch: {repositoryNameWithOwner:repository, branchName:branch},
+    expectedHeadOid:head,
+    message: {headline:'Aktualizace katalogu Kurtna.cz'},
+    fileChanges: {additions, deletions},
+  }}});
+  if (!result.data?.createCommitOnBranch?.commit?.oid) {
+    throw new Error('GitHub změny neuložil. Zkontrolujte oprávnění tokenu, pravidla větve a aktuální verzi katalogu.');
+  }
+  baseProducts = products;
+  baseSHA = await gitBlobSHA(new TextEncoder().encode(draft));
 }
 
 function decode(content) {
@@ -125,28 +170,33 @@ function encode(data) {
   return btoa(binary);
 }
 
+async function gitBlobSHA(bytes) {
+  const header = new TextEncoder().encode('blob ' + bytes.length + '\0');
+  const combined = new Uint8Array(header.length + bytes.length);
+  combined.set(header);
+  combined.set(bytes, header.length);
+  const digest = await crypto.subtle.digest('SHA-1', combined);
+  return [...new Uint8Array(digest)].map(n => n.toString(16).padStart(2,'0')).join('');
+}
+
 function openCatalog(raw, sha, message) {
   products = validateCatalog(JSON.parse(raw));
   baseSHA = sha;
+  baseProducts = products;
   $('#workspace').hidden = false;
   openProduct(products[0]);
   status.textContent = message + ' Produktů: ' + products.length + '.';
 }
 
 try {
-  const data = await github('GET');
+  const data = await githubFile(catalogPath, branch);
   openCatalog(decode(data.content), data.sha, 'Katalog načten z GitHubu.');
 } catch {
   try {
     const response = await fetch(catalogPath, {cache:'no-cache'});
     if (!response.ok) throw new Error();
     const bytes = new Uint8Array(await response.arrayBuffer());
-    const header = new TextEncoder().encode('blob ' + bytes.length + '\0');
-    const combined = new Uint8Array(header.length + bytes.length);
-    combined.set(header);
-    combined.set(bytes, header.length);
-    const digest = await crypto.subtle.digest('SHA-1',combined);
-    const sha = [...new Uint8Array(digest)].map(n => n.toString(16).padStart(2,'0')).join('');
+    const sha = await gitBlobSHA(bytes);
     openCatalog(new TextDecoder().decode(bytes), sha, 'Načtená je aktuálně nasazená verze.');
   } catch {
     status.textContent = 'Katalog nelze načíst. Obnovte stránku a zkuste to znovu.';
@@ -165,16 +215,10 @@ publisher.addEventListener('submit', async event => {
   showList();
   publication.textContent = 'Publikuji změny do GitHubu…';
   try {
-    const result = await github('PUT', token, {
-      message: 'Aktualizace katalogu Kurtna.cz',
-      branch: 'main',
-      sha: baseSHA,
-      content: encode(JSON.stringify(products,null,2) + '\n'),
-    });
-    baseSHA = result.content.sha;
+    await publishCatalog(token);
     pending = false;
     status.textContent = 'Katalog uložen do GitHubu.';
-    publication.textContent = 'GitHub přijal změny. Na webu se zobrazí po dokončení nasazení.';
+    publication.textContent = 'GitHub uložil katalog, detaily a mapu webu. Zobrazí se po dokončení nasazení.';
   } catch (error) {
     publication.textContent = error.message;
   } finally {

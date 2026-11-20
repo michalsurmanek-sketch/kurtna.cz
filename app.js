@@ -1,5 +1,5 @@
 'use strict';
-import { assetURL, loadCatalog, productURL, statuses } from './catalog.js';
+import { assetURL, loadCatalog, productURL, statuses } from './catalog.js?v=paths-2';
 let products = [];
 let catalogLoaded = false;
 try {
@@ -109,7 +109,8 @@ function setProductSEO(p) {
 }
 
 function renderDetail() {
-  const slug = new URLSearchParams(location.search).get('produkt');
+  const staticSlug = document.body.dataset.productSlug;
+  const slug = staticSlug || new URLSearchParams(location.search).get('produkt');
   if (slug === null) {
     setCanonical(canonicalBase);
     return;
@@ -119,6 +120,7 @@ function renderDetail() {
   target.hidden = false;
   const p = products.find(product => product.slug === slug);
   if (!p) {
+    if (staticSlug && !catalogLoaded) return;
     if (catalogLoaded) {
       const robots = document.createElement('meta');
       robots.name = 'robots';
@@ -129,7 +131,7 @@ function renderDetail() {
     target.innerHTML = '<h1>Produkt se nepodařilo zobrazit</h1><p><a href="./#produkty">Zpět do katalogu</a></p>';
     return;
   }
-  setProductSEO(p);
+  if (!staticSlug) setProductSEO(p);
   target.innerHTML = `<nav class="detail-path" aria-label="Drobečková navigace"><a href="./#produkty">← Zpět do katalogu</a></nav>
     <article class="detail-grid">
       <div>

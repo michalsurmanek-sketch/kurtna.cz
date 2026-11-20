@@ -38,4 +38,4 @@ export async function loadCatalog() {
 }
 
 export const assetURL = path => new URL(path, import.meta.url).href;
-export const productURL = slug => './?produkt=' + encodeURIComponent(slug);
+export const productURL = slug => '/produkt/' + encodeURIComponent(slug) + '/';

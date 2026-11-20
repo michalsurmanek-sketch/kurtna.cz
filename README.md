@@ -14,4 +14,6 @@ Lokální náhled lze otevřít přes HTTP server, například `python3 -m http.
 
 ## SEO
 
-`robots.txt` odkazuje na `sitemap.xml`. Při přidání, skrytí nebo změně adresy produktu upravte příslušné odkazy v sitemapě. Detaily nastavují vlastní popisy, kanonickou adresu a strukturovaná data při vykreslení JavaScriptu. Platformy pro sdílení, které JavaScript nespouštějí, používají společný náhled značky z úvodní stránky.
+Při publikaci v administraci se společně uloží katalog, dotčené stránky v `produkt/` a `sitemap.xml`. Administrace vytvoří stránky pro nové položky a odstraní stránky položek skrytých v nabídce. Každý detail obsahuje vlastní adresu, titulek, popis, strukturovaná data a produktový náhled pro sdílení přímo v HTML. Staré odkazy s parametrem `?produkt=` fungují dál.
+
+Při přímé editaci katalogu na GitHubu je nutné aktualizovat také výstupy, které jinak vytváří administrace. Při úpravě společné šablony lze regenerovat všechny detaily příkazem `node regenerate-products.mjs`.
