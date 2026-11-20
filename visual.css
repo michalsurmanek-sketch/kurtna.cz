@@ -355,3 +355,19 @@ nav a{transition:color .2s}
     outline-offset: 2px;
   }
 }
+
+.menu-backdrop { display: none; }
+
+@media (max-width: 600px) {
+  .announcement { position: relative; z-index: 19; }
+  .menu-backdrop:not([hidden]) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 18;
+    background: rgba(8, 11, 12, .25);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    touch-action: none;
+  }
+}

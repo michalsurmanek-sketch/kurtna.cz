@@ -265,4 +265,29 @@ function renderCart() {
 }
 $('.cart').onclick=renderCart;
 function checkout(){show(`<h2>Připravit poptávku</h2><p>Poptávka se stáhne jako textový soubor. Nikam se neodesílá, nevytváří objednávku a nevyžaduje platbu. Kontaktní údaje se neukládají.</p><form class="checkout"><label>Jméno<input name="name" autocomplete="name" required maxlength="100"></label><label>E-mail<input name="email" type="email" autocomplete="email" required maxlength="150"></label><label>Poznámka<textarea name="note" maxlength="2000"></textarea></label><button class="action" type="submit">Stáhnout podklady poptávky</button><button type="button" id="back-cart">Zpět do košíku</button></form>`);$('#back-cart').onclick=renderCart;body.querySelector('form').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);const text=['KURTNA.CZ – NEODESLANÁ POPTÁVKA',`Datum: ${new Date().toLocaleDateString('cs-CZ')}`,`Jméno: ${f.get('name')}`,`E-mail: ${f.get('email')}`,'',...products.filter(p=>cart[p.id]).map(p=>`${p.name}: ${cart[p.id]} ks × ${money(p.price)}`),`Orientační součet bez dopravy: ${money(total())}`,'',`Poznámka: ${f.get('note')}`,'','Ceny a parametry jsou ilustrační. Toto není objednávka ani potvrzení dostupnosti.'].join('\n');const url=URL.createObjectURL(new Blob(['\ufeff'+text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='kurtna-poptavka.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);ping('Podklady připraveny ke stažení. Poptávka nebyla odeslána.');};}
-$('#menu').setAttribute('aria-expanded','false');$('#menu').onclick=()=>{const n=$('.header nav'),open=$('#menu').getAttribute('aria-expanded')==='true';$('#menu').setAttribute('aria-expanded',String(!open));n.style.cssText=open?'':'display:flex;position:absolute;top:62px;left:0;right:0;padding:18px;background:#171819;flex-direction:column;z-index:8';};document.querySelectorAll('.header nav a').forEach(a=>a.onclick=()=>{$('.header nav').style.cssText='';$('#menu').setAttribute('aria-expanded','false');});if (products.length) save(); else $('#count').textContent = 0;filter();
+const menuButton = $('#menu');
+const navigation = $('#main-nav');
+const menuBackdrop = $('#menu-backdrop');
+const mobileMenu = matchMedia('(max-width: 600px)');
+
+function setMenuOpen(open) {
+  navigation.classList.toggle('open', open);
+  menuBackdrop.hidden = !open;
+  menuButton.setAttribute('aria-expanded', String(open));
+}
+
+menuButton.addEventListener('click', () => setMenuOpen(menuBackdrop.hidden));
+menuBackdrop.addEventListener('click', () => setMenuOpen(false));
+navigation.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenuOpen(false)));
+mobileMenu.addEventListener('change', event => {
+  if (!event.matches) setMenuOpen(false);
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || menuBackdrop.hidden) return;
+  setMenuOpen(false);
+  menuButton.focus();
+});
+searchToggle.addEventListener('click', () => setMenuOpen(false));
+if (products.length) save();
+else $('#count').textContent = 0;
+filter();
