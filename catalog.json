@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "slug": "kurtna-5t-8m",
+    "sku": "KUR-5T-8M",
+    "name": "Upínací pás (kurtna) 5 t / 8 m",
+    "label": "5 t / 8 m",
+    "description": "Varianta s délkou 8 m. Před výběrem ověřte, zda délka odpovídá rozměrům nákladu a umístění kotevních bodů.",
+    "capacity": "5 t",
+    "length": 8,
+    "price": 499,
+    "status": "preview",
+    "published": true,
+    "images": [
+      "assets/kurtna-5t-8m.webp"
+    ]
+  },
+  {
+    "id": 2,
+    "slug": "kurtna-2t-6m",
+    "sku": "KUR-2T-6M",
+    "name": "Upínací pás (kurtna) 2 t / 6 m",
+    "label": "2 t / 6 m",
+    "description": "Varianta s délkou 6 m. Před výběrem ověřte potřebnou délku při vedení pásu přes náklad.",
+    "capacity": "2 t",
+    "length": 6,
+    "price": 299,
+    "status": "preview",
+    "published": true,
+    "images": [
+      "assets/kurtna-2t-6m.webp"
+    ]
+  },
+  {
+    "id": 3,
+    "slug": "kurtna-3t-10m",
+    "sku": "KUR-3T-10M",
+    "name": "Upínací pás (kurtna) 3 t / 10 m",
+    "label": "3 t / 10 m",
+    "description": "Varianta s délkou 10 m. Vhodnost pro konkrétní náklad posuďte podle požadované délky a údajů na štítku výrobce.",
+    "capacity": "3 t",
+    "length": 10,
+    "price": 399,
+    "status": "preview",
+    "published": true,
+    "images": [
+      "assets/kurtna-3t-10m.webp"
+    ]
+  },
+  {
+    "id": 4,
+    "slug": "kurtna-5t-12m",
+    "sku": "KUR-5T-12M",
+    "name": "Upínací pás (kurtna) 5 t / 12 m — Heavy Duty",
+    "label": "5 t / 12 m — Heavy Duty",
+    "description": "Varianta Heavy Duty s délkou 12 m. Parametry a provedení potvrdíme podle podkladů dodavatele.",
+    "capacity": "5 t",
+    "length": 12,
+    "price": 699,
+    "status": "preview",
+    "published": true,
+    "images": [
+      "assets/kurtna-5t-12m.webp"
+    ]
+  }
+]

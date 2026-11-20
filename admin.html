@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://api.github.com; base-uri 'none'; form-action 'none'">
+  <title>Správa katalogu | Kurtna.cz</title>
+  <link rel="stylesheet" href="admin.css">
+  <script type="module" src="admin.js"></script>
+</head>
+<body>
+  <main>
+    <header class="admin-head">
+      <a href="./">← Kurtna.cz</a>
+      <h1>Správa katalogu</h1>
+      <p>Upravte produkty a publikujte změny na web přes GitHub.</p>
+    </header>
+    <p id="status" role="status" aria-live="polite">Načítám katalog…</p>
+    <div id="workspace" hidden>
+      <div class="admin-grid">
+        <aside>
+          <button id="new-product" type="button">+ Přidat produkt</button>
+          <ul id="products" class="product-list"></ul>
+        </aside>
+        <form id="editor">
+          <h2 id="editor-title">Produkt</h2>
+          <div class="fields">
+            <label>Název produktu <input name="name" required maxlength="140"></label>
+            <label>Krátký název na kartě <input name="label" required maxlength="70"></label>
+            <label>Kód produktu (SKU) <input name="sku" required maxlength="40"></label>
+            <label>Část adresy produktu <input name="slug" required maxlength="100" pattern="[a-z0-9]+(-[a-z0-9]+)*"></label>
+            <label>Označení varianty <input name="capacity" required maxlength="24" placeholder="Např. 5 t"></label>
+            <label>Délka v metrech <input name="length" required type="number" min="0.01" max="1000" step="0.01"></label>
+            <label>Orientační cena v Kč <input name="price" required type="number" min="1" max="1000000" step="1"></label>
+            <label>Stav <select name="status"><option value="preview">Připravujeme</option><option value="available">Dostupné k poptání</option><option value="unavailable">Dočasně nedostupné</option></select></label>
+          </div>
+          <label>Popis <textarea name="description" rows="4" maxlength="1800"></textarea></label>
+          <label>Fotografie (až šest cest, každá na novém řádku)
+            <textarea name="images" rows="3" placeholder="assets/kurtna-5t-8m.webp"></textarea>
+          </label>
+          <a href="https://github.com/michalsurmanek-sketch/kurtna.cz/upload/main/assets" target="_blank" rel="noopener noreferrer">Nahrát fotku do složky assets na GitHubu ↗</a>
+          <label class="check"><input name="published" type="checkbox"> Zobrazovat produkt v katalogu</label>
+          <button type="submit">Uložit produkt do změn</button>
+          <a id="preview-link" hidden>Otevřít produkt na webu ↗</a>
+        </form>
+      </div>
+      <form id="publisher" autocomplete="off">
+        <h2>Publikace na web</h2>
+        <p>Zadejte <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">token GitHubu s omezeným přístupem</a> pouze k repozitáři <strong>kurtna.cz</strong> a oprávněním <strong>Contents: Read and write</strong>. Token odešleme přímo GitHubu a po pokusu o publikaci jej z pole vymažeme.</p>
+        <p>Skryté produkty nejsou v nabídce, ale zdrojový katalog je veřejný. Nevkládejte sem neveřejné údaje.</p>
+        <label>GitHub token <input id="github-token" type="password" autocomplete="off" spellcheck="false" required></label>
+        <button id="publish" type="submit" disabled>Publikovat změny</button>
+        <p id="publication" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+    <noscript>Pro správu katalogu zapněte JavaScript.</noscript>
+  </main>
+</body>
+</html>
