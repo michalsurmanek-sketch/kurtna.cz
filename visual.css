@@ -146,7 +146,18 @@ nav a{transition:color .2s}
 
 .announcement svg { color: var(--orange); }
 .header { padding-inline: var(--edge); }
-.header nav a { font-weight: 700; }
+.header nav a {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 5px;
+  font-weight: 700;
+}
+
+.nav-chevron {
+  flex: none;
+  color: var(--orange);
+}
 .brand .slashes {
   display: inline-flex;
   gap: .15em;
