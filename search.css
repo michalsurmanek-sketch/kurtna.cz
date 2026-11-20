@@ -1,6 +1,11 @@
 .search-combobox { position:relative; min-width:0; }
 .header-search { flex:0 1 308px; min-width:130px; }
 .header-search .search { width:100%; }
+.header-search .search:focus-within {
+  border-color:var(--orange);
+  box-shadow:inset 0 0 0 1px var(--orange);
+}
+.header-search .search input:focus { outline:none; }
 .head-icon.search-toggle { display:none; }
 .filter-search { flex:1; min-width:140px; }
 .filter-search label { margin:0; }
