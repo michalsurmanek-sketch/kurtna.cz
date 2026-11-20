@@ -60,7 +60,7 @@ dialog.cart-preview {
 .cart-quantity button { min-height:34px; padding:0; border:0; border-radius:0; background:#303234; color:#fff; font-size:18px; }
 .cart-quantity button:disabled { color:#a0a0a0; cursor:default; }
 .cart-quantity button:focus-visible { outline-offset:-3px; }
-.cart-quantity-value { font-size:13px; font-weight:800; }
+.cart-quantity-value { font-size:12px; font-weight:800; }
 .cart-remove, .cart-continue { padding:5px 6px; border:0; background:none; color:#d7d0ca; text-decoration:underline; text-underline-offset:3px; }
 .cart-remove { font-size:12px; }
 .cart-item-total { grid-area:total; text-align:right; color:#ff9856; white-space:nowrap; }
