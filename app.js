@@ -75,19 +75,61 @@ for (const [selector, field] of [['.category--use','mobile-search'],['.category-
   });
 }
 
+const canonicalBase = 'https://kurtna.cz/';
+function setCanonical(url) {
+  const link = document.createElement('link');
+  link.rel = 'canonical';
+  link.href = url;
+  document.head.append(link);
+}
+function setProductSEO(p) {
+  const url = new URL(productURL(p.slug), canonicalBase).href;
+  const title = p.name + ' | Kurtna.cz';
+  const description = p.description || p.name;
+  document.title = title;
+  setCanonical(url);
+  const updateMeta = (key, content) => {
+    const attribute = key.startsWith('og:') ? 'property' : 'name';
+    document.querySelector(`meta[${attribute}="${key}"]`).content = content;
+  };
+  for (const key of ['description','og:description','twitter:description']) updateMeta(key, description);
+  for (const key of ['og:title','twitter:title']) updateMeta(key, title);
+  updateMeta('og:url', url);
+  const data = {'@context':'https://schema.org','@type':'Product',name:p.name,description,sku:p.sku,url};
+  if (p.images.length) {
+    data.image = p.images.map(path => new URL(path, canonicalBase).href);
+    for (const key of ['og:image','twitter:image']) updateMeta(key, data.image[0]);
+    for (const key of ['og:image:alt','twitter:image:alt']) updateMeta(key, p.name + ' – ilustrační fotografie');
+    for (const suffix of ['type','width','height']) document.querySelector(`meta[property="og:image:${suffix}"]`).remove();
+  }
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.textContent = JSON.stringify(data);
+  document.head.append(script);
+}
+
 function renderDetail() {
   const slug = new URLSearchParams(location.search).get('produkt');
-  if (slug === null) return;
+  if (slug === null) {
+    setCanonical(canonicalBase);
+    return;
+  }
   document.body.classList.add('is-product-page');
   const target = $('#produkt');
   target.hidden = false;
   const p = products.find(product => product.slug === slug);
   if (!p) {
+    if (catalogLoaded) {
+      const robots = document.createElement('meta');
+      robots.name = 'robots';
+      robots.content = 'noindex';
+      document.head.append(robots);
+      document.title = 'Produkt nenalezen | Kurtna.cz';
+    }
     target.innerHTML = '<h1>Produkt se nepodařilo zobrazit</h1><p><a href="./#produkty">Zpět do katalogu</a></p>';
     return;
   }
-  document.title = p.name + ' | Kurtna.cz';
-  document.querySelector('meta[name="description"]').content = p.description || p.name;
+  setProductSEO(p);
   target.innerHTML = `<nav class="detail-path" aria-label="Drobečková navigace"><a href="./#produkty">← Zpět do katalogu</a></nav>
     <article class="detail-grid">
       <div>

@@ -11,3 +11,7 @@ Katalog běží na GitHub Pages z větve `main`. Veřejná nabídka, odkazy na d
 Pro výměnu fotografie nahrajte soubor na GitHub do `assets/` a do produktu vložte jeho cestu, například `assets/kurtna-5t-8m.webp`. Aktivní interval a oprávnění tokenu nastavuje majitel repozitáře na GitHubu. Údaje skrytých produktů zůstávají ve veřejném repozitáři.
 
 Lokální náhled lze otevřít přes HTTP server, například `python3 -m http.server 8000`.
+
+## SEO
+
+`robots.txt` odkazuje na `sitemap.xml`. Při přidání, skrytí nebo změně adresy produktu upravte příslušné odkazy v sitemapě. Detaily nastavují vlastní popisy, kanonickou adresu a strukturovaná data při vykreslení JavaScriptu. Platformy pro sdílení, které JavaScript nespouštějí, používají společný náhled značky z úvodní stránky.
