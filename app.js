@@ -1,5 +1,6 @@
 'use strict';
 import { assetURL, loadCatalog, productURL, statuses } from './catalog.js?v=paths-2';
+import { installSearchSuggestions, matchesProduct } from './search.js?v=1';
 let products = [];
 let catalogLoaded = false;
 try {
@@ -22,7 +23,6 @@ function add(id){if (!products.some(p => p.id === id && quoteable(p))) return;ca
 const cartIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 3h3l3 13h11l3-10H6"/><circle cx="10" cy="21" r="1"/><circle cx="19" cy="21" r="1"/></svg>';
 const productGrid = $('.products');
 const cards = new Map();
-const normalize = value => value.toLocaleLowerCase('cs').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 for (const p of products) {
   const card = document.createElement('article');
@@ -45,7 +45,7 @@ appendOptions($('#length'), [...new Set(products.map(p => p.length))].sort((a,b)
 
 function filter() {
   if (!catalogLoaded) return;
-  const query = normalize($('#mobile-search').value.trim());
+  const query = $('#mobile-search').value.trim();
   const capacity = $('#capacity').value;
   const length = $('#length').value;
   const order = $('#sort').value;
@@ -53,7 +53,7 @@ function filter() {
   let count = 0;
   for (const p of sorted) {
     const card = cards.get(p.id);
-    card.hidden = !(normalize([p.name, p.sku, p.label].join(' ')).includes(query) &&
+    card.hidden = !((!query || matchesProduct(query,p)) &&
       (!capacity || p.capacity === capacity) && (!length || p.length === Number(length)));
     if (!card.hidden) count++;
     productGrid.append(card);
@@ -62,6 +62,41 @@ function filter() {
 }
 $('#search').oninput = e => { $('#mobile-search').value = e.target.value; filter(); };
 $('#mobile-search').oninput = e => { $('#search').value = e.target.value; filter(); };
+const headerSearch = $('#header-search');
+const searchToggle = $('#search-toggle');
+const headerInput = $('#search');
+const mobileCatalogQuery = $('#mobile-search');
+const submitSearch = () => {
+  closeHeaderSearch();
+  $('.catalog-controls').open = true;
+  $('#produkty').scrollIntoView();
+};
+const headerSuggestions = installSearchSuggestions(headerInput, headerSearch, products, submitSearch);
+installSearchSuggestions(mobileCatalogQuery, $('#filter-search'), products, submitSearch);
+function closeHeaderSearch() {
+  headerSuggestions.close();
+  headerSearch.classList.remove('is-open');
+  searchToggle.setAttribute('aria-expanded','false');
+  searchToggle.setAttribute('aria-label','Otevřít vyhledávání');
+}
+searchToggle.addEventListener('click', () => {
+  if (headerSearch.classList.contains('is-open')) { closeHeaderSearch(); return; }
+  headerSearch.classList.add('is-open');
+  searchToggle.setAttribute('aria-expanded','true');
+  searchToggle.setAttribute('aria-label','Zavřít vyhledávání');
+  headerInput.focus();
+});
+headerInput.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !event.defaultPrevented && headerSearch.classList.contains('is-open')) {
+    closeHeaderSearch();
+    searchToggle.focus();
+  }
+});
+document.addEventListener('pointerdown', event => {
+  if (headerSearch.classList.contains('is-open') && !headerSearch.contains(event.target) && !searchToggle.contains(event.target)) closeHeaderSearch();
+});
+$('#menu').addEventListener('click', closeHeaderSearch);
+
 for (const id of ['capacity','length','sort']) $('#' + id).onchange = filter;
 $('#reset').onclick = () => {
   for (const id of ['search','mobile-search','capacity','length']) $('#' + id).value = '';
