@@ -27,7 +27,7 @@ nav a{transition:color .2s}
 .category--use{--category-image:url("assets/category-use.webp")}
 .category--capacity{--category-image:url("assets/category-capacity.webp")}
 .category--length{--category-image:url("assets/category-length.webp")}
-.category::before{
+.categories .category::before{
  content:"";
  position:absolute;
  inset:0 49% 0 0;
@@ -53,7 +53,7 @@ nav a{transition:color .2s}
 @media(max-width:900px){
  .header{gap:14px}nav{gap:13px}
  .category{padding-inline-start:45%}
- .category::before{right:55%}
+ .categories .category::before{right:55%}
  .category b{font-size:22px}
  .product .photo{background-size:433% auto}
  .trust strong{white-space:normal}
@@ -71,7 +71,7 @@ nav a{transition:color .2s}
  .hero h1{font-size:clamp(34px,9vw,45px);letter-spacing:-1.3px}
  .categories{margin-top:0}
  .category{height:90px;padding-inline-start:47%}
- .category::before{right:52%}
+ .categories .category::before{right:52%}
  .category strong{font-size:clamp(16px,5.4vw,22px)}
  .category b{font-size:25px}
  .products{grid-template-columns:repeat(2,minmax(0,1fr))}
