@@ -1,0 +1,29 @@
+.account-card {
+  max-width: 520px;
+  margin-inline: auto;
+  padding: clamp(18px, 5vw, 36px);
+  border: 1px solid #444;
+  border-radius: 12px;
+  background: #191c1d;
+}
+.account-card h1 { font-size: clamp(26px, 5vw, 40px); }
+.account-card [hidden] { display: none; }
+.account-card form, .account-card label { display: grid; gap: 7px; }
+.account-card form { gap: 16px; }
+.account-card input {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #656565;
+  border-radius: 6px;
+  background: #111314;
+  color: inherit;
+  font: inherit;
+}
+.account-card button { cursor: pointer; font: inherit; }
+.account-card .button { border: 0; justify-self: start; font-weight: 750; }
+.account-card button:disabled { opacity: .65; cursor: wait; }
+.account-card :focus-visible { outline: 2px solid #ff9856; outline-offset: 3px; }
+.account-links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 16px; }
+.account-links button { border: 0; padding: 5px 0; background: none; color: #ff9856; text-decoration: underline; }
+#account-status:empty { display: none; }
+#account-email { overflow-wrap: anywhere; }

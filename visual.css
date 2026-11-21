@@ -391,3 +391,15 @@ nav a{transition:color .2s}
   .trust span { flex-direction:column; gap:5px; }
   .trust svg { width:20px; height:20px; }
 }
+
+.header .account-icon { display: inline-flex; align-items: center; padding: 2px 6px; }
+.header .mobile-account-link { display: none; }
+
+@media (max-width: 740px) {
+  .header .account-icon { display: none; }
+  .header .mobile-account-link { display: inline-flex; }
+}
+
+@media (min-width: 601px) and (max-width: 740px) {
+  .header nav .mobile-account-link { font-size: 13px; white-space: normal; }
+}

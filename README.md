@@ -17,3 +17,9 @@ Lokální náhled lze otevřít přes HTTP server, například `python3 -m http.
 Při publikaci v administraci se společně uloží katalog, dotčené stránky v `produkt/` a `sitemap.xml`. Administrace vytvoří stránky pro nové položky a odstraní stránky položek skrytých v nabídce. Každý detail obsahuje vlastní adresu, titulek, popis, strukturovaná data a produktový náhled pro sdílení přímo v HTML. Staré odkazy s parametrem `?produkt=` fungují dál.
 
 Při přímé editaci katalogu na GitHubu je nutné aktualizovat také výstupy, které jinak vytváří administrace. Při úpravě společné šablony lze regenerovat všechny detaily příkazem `node regenerate-products.mjs`.
+
+## Zákaznické účty
+
+Stránka `/ucet/` používá e-mail a heslo přes samostatný Supabase projekt pro Kurtna.cz. Pro spuštění nastavte v Supabase Auth potvrzování e-mailu, minimální délku hesla 8 znaků, Site URL `https://kurtna.cz` a povolenou adresu návratu `https://kurtna.cz/ucet/`. Nastavte vlastní SMTP pro ověřovací e-maily a obnovu hesla. Výchozí šablony mají používat ověřovací odkaz `{{ .ConfirmationURL }}`.
+
+Po ověření e-mailové konfigurace zapište URL projektu a výhradně veřejný klíč `sb_publishable_…` do `auth-config.json`. Soubor nepatří pro SMTP hesla, tajné klíče ani klíč service role. Prázdná konfigurace ponechá účet v přípravě. Katalog a košík nadále fungují i bez účtu.
