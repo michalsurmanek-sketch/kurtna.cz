@@ -403,3 +403,29 @@ nav a{transition:color .2s}
 @media (min-width: 601px) and (max-width: 740px) {
   .header nav .mobile-account-link { font-size: 13px; white-space: normal; }
 }
+
+/* Shared catalog footer */
+.site-footer{background:#0c1012;border-top:1px solid #353b3e;margin-top:36px;color:#f5f2ed}
+.footer-slogan{background:#ff7512;color:#101213;text-align:center;font-size:clamp(23px,3vw,38px);font-weight:900;font-style:italic;line-height:1.2;padding:22px 16px;text-wrap:balance}
+.footer-inner{max-width:1200px;margin:auto;padding:0 32px}
+.footer-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;padding:34px 0}
+.footer-benefits>span{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;font-size:16px;font-weight:700;line-height:1.4}
+.footer-benefits svg{width:32px;height:32px;color:#ff7512;flex-shrink:0}
+.footer-guide{display:flex;align-items:center;gap:28px;padding:28px;border:1px solid #505658;border-radius:14px;background:#171b1d}
+.footer-guide>svg{width:64px;height:64px;flex-shrink:0;color:#ff7512}
+.footer-guide>div{border-left:1px solid #505658;padding-left:28px;min-width:0}
+.site-footer h2{font-size:24px;line-height:1.25;margin:0 0 8px;font-style:normal;letter-spacing:-.3px}
+.site-footer p{margin:0;color:#c2c5c6;line-height:1.55;font-size:16px}
+.footer-button{display:inline-flex;align-items:center;gap:24px;margin-top:18px;padding:13px 22px;background:#ff7512;color:#101213;font-weight:700;border-radius:8px;text-decoration:none;min-height:48px}
+.footer-button:hover{background:#ff8a36}.footer-button span{font-size:24px;line-height:1}
+.footer-columns{display:grid;grid-template-columns:1fr 1fr;gap:60px;padding:40px 0 30px}
+.footer-brand>a{font-size:clamp(32px,4vw,46px);letter-spacing:-1.7px;font-weight:900;line-height:1.1;text-decoration:none;display:inline-block;margin-bottom:10px}.footer-brand>a span{color:#ff7512}
+.footer-navigation details{padding:0;border-bottom:1px solid #454d50}.footer-navigation details:first-child{border-top:1px solid #454d50}
+.footer-navigation summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 0;font-size:19px;min-height:60px}
+.footer-navigation summary::-webkit-details-marker{display:none}.footer-navigation summary:after{content:'+';color:#ff7512;font-size:30px;font-weight:400;line-height:1}.footer-navigation details[open]>summary:after{content:'−'}
+.footer-links{padding:0 0 20px;display:grid;gap:12px}.footer-links a{display:flex;justify-content:space-between;gap:16px;text-underline-offset:4px}.footer-links p{font-size:14px}
+.footer-launch{display:flex;align-items:center;gap:22px;border:1px solid #505658;border-radius:12px;padding:24px;background:#171b1d}
+.footer-launch h2{font-size:19px}.footer-launch p{font-size:14px}.footer-info{flex:0 0 30px;height:30px;border:2px solid #ff7512;color:#ff7512;border-radius:50%;display:grid;place-items:center;font-weight:bold;font-size:20px;font-family:Georgia,serif}
+.footer-launch>div{border-left:1px solid #505658;padding-left:22px}
+.footer-bottom{margin-top:30px;border-top:1px solid #454d50;padding:22px 0 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;color:#b2b8ba}.footer-bottom small,.footer-bottom a{font-size:13px}.footer-bottom a{text-underline-offset:4px;min-height:44px;display:inline-flex;align-items:center}
+@media(max-width:600px){.site-footer{margin-top:26px}.footer-inner{padding:0 18px}.footer-slogan{padding:19px 14px;font-size:clamp(22px,5.5vw,30px)}.footer-benefits{gap:10px;padding:26px 0}.footer-benefits>span{font-size:12px;gap:10px}.footer-benefits svg{width:27px;height:27px}.footer-guide{padding:21px 16px;gap:16px;align-items:flex-start}.footer-guide>svg{width:35px;height:35px;margin-top:4px}.footer-guide>div{padding-left:16px}.site-footer h2{font-size:20px}.site-footer p{font-size:14px}.footer-button{font-size:14px;padding:11px 16px;gap:18px;margin-top:16px}.footer-columns{grid-template-columns:1fr;gap:26px;padding:30px 0 24px}.footer-brand>a{font-size:38px}.footer-navigation summary{font-size:18px;padding:16px 0}.footer-launch{padding:19px 16px;gap:14px;align-items:flex-start}.footer-launch>div{padding-left:14px}.footer-launch h2{font-size:16px}.footer-launch p{font-size:13px}.footer-info{flex-basis:25px;height:25px;font-size:17px}.footer-bottom{margin-top:24px;padding:16px 0 20px;flex-wrap:wrap}.footer-bottom small,.footer-bottom a{font-size:12px}}
